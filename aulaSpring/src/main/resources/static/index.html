@@ -1,8 +1,70 @@
 <!doctype html>
 <html>
-  <head><meta charset="utf-8"><title>Projeto</title></head>
-  <body>
-    <h1>Aplicação no ar 🎉</h1>
-    <p>Tente também <code>/pessoas</code> (se houver controller/REST).</p>
-  </body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pessoas - Spring Boot</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="main-content">
+        <div class="content-container">
+            <h1><i class="fas fa-rocket"></i> Aplicação no ar! 🎉</h1>
+            
+            <div class="info-card">
+                <h3><i class="fas fa-check-circle"></i> Sistema Funcionando</h3>
+                <p>O Spring Boot está rodando corretamente e todas as funcionalidades estão disponíveis.</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                <div class="info-card">
+                    <h3><i class="fas fa-users"></i> Interface Thymeleaf</h3>
+                    <p>Interface web tradicional usando templates Thymeleaf</p>
+                    <a href="/pessoas/listar" class="botao">
+                        <i class="fas fa-external-link-alt"></i> Acessar
+                    </a>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-code"></i> Aplicação Vue.js</h3>
+                    <p>Interface moderna desenvolvida em Vue.js</p>
+                    <a href="/vue-app/" class="botao" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Acessar
+                    </a>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-tools"></i> Teste das APIs</h3>
+                    <p>Teste interativo das APIs REST</p>
+                    <a href="/test-api.html" class="botao" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Acessar
+                    </a>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3><i class="fas fa-info-circle"></i> Funcionalidades Disponíveis</h3>
+                <ul style="margin-left: 1rem;">
+                    <li><strong>Cadastrar pessoas:</strong> Adicionar novas pessoas ao sistema</li>
+                    <li><strong>Listar pessoas:</strong> Visualizar todas as pessoas cadastradas</li>
+                    <li><strong>Detalhes:</strong> Ver informações detalhadas de uma pessoa</li>
+                    <li><strong>Excluir:</strong> Remover pessoas do sistema</li>
+                    <li><strong>APIs REST:</strong> Endpoints para integração com outras aplicações</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="color: #666; font-style: italic;">
+                    <i class="fas fa-database"></i> Banco de dados PostgreSQL ativo<br>
+                    <i class="fas fa-server"></i> Servidor Spring Boot rodando na porta 8080
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p><i class="fas fa-code"></i> Sistema de Pessoas - Desenvolvido com Spring Boot & Thymeleaf</p>
+    </footer>
+</body>
 </html>

@@ -3,35 +3,76 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Pessoas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pessoas - Sistema Moderno</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
+    
     <main class="main-content">
-        <h1>Lista de Pessoas</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Idade</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="pessoa : ${lista}">
-                    <td th:text="${pessoa.id}"></td>
-                    <td th:text="${pessoa.nome}"></td>
-                    <td th:text="${pessoa.idade}"></td>
-                    <td><a th:href="@{/pessoas/{id}(id=${pessoa.id})}" class="botao">Detalhes</a></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="content-container">
+            <h1><i class="fas fa-users"></i> Lista de Pessoas</h1>
+            
+            <!-- Mensagem de sucesso -->
+            <div th:if="${success}" class="success" th:text="${success}"></div>
+            
+            <!-- Estatísticas -->
+            <div class="info-card">
+                <h3><i class="fas fa-chart-bar"></i> Estatísticas</h3>
+                <p>Total de pessoas cadastradas: <strong th:text="${#lists.size(lista)}">0</strong></p>
+            </div>
+            
+            <!-- Tabela de pessoas -->
+            <div th:if="${#lists.isEmpty(lista)}" class="info-card">
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-user-plus" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h3>Nenhuma pessoa cadastrada</h3>
+                    <p>Comece cadastrando a primeira pessoa no sistema.</p>
+                    <a th:href="@{/pessoas/cadastrar}" class="botao">
+                        <i class="fas fa-plus"></i> Cadastrar Primeira Pessoa
+                    </a>
+                </div>
+            </div>
+            
+            <div th:unless="${#lists.isEmpty(lista)}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i> ID</th>
+                            <th><i class="fas fa-user"></i> Nome</th>
+                            <th><i class="fas fa-calendar-alt"></i> Idade</th>
+                            <th><i class="fas fa-cogs"></i> Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="pessoa : ${lista}">
+                            <td th:text="${pessoa.id}"></td>
+                            <td th:text="${pessoa.nome}"></td>
+                            <td th:text="${pessoa.idade}"></td>
+                            <td>
+                                <a th:href="@{/pessoas/{id}(id=${pessoa.id})}" class="botao">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Botão para cadastrar nova pessoa -->
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a th:href="@{/pessoas/cadastrar}" class="botao">
+                        <i class="fas fa-plus"></i> Cadastrar Nova Pessoa
+                    </a>
+                </div>
+            </div>
+        </div>
     </main>
+    
     <footer>
-        <p>(c) 2025 Meu App</p>
+        <p><i class="fas fa-code"></i> Sistema de Pessoas - Desenvolvido com Spring Boot & Thymeleaf</p>
     </footer>
 </body>
 

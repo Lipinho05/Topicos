@@ -3,39 +3,98 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Detalhes da Pessoa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Pessoa - Sistema Moderno</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
+    
     <main class="main-content">
-        <h1>Detalhes da Pessoa</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Idade</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td th:text="${pessoa.id}"></td>
-                    <td th:text="${pessoa.nome}"></td>
-                    <td th:text="${pessoa.idade}"></td>
-                    <td>
-                        <form th:action="@{/pessoas/{id}/excluir(id=${pessoa.id})}" method="post">
-                            <button type="submit" class="botao">Excluir</button>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="content-container">
+            <h1><i class="fas fa-user"></i> Detalhes da Pessoa</h1>
+            
+            <!-- Card de informações da pessoa -->
+            <div class="info-card">
+                <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                    <i class="fas fa-id-card" style="font-size: 2rem; color: #667eea; margin-right: 1rem;"></i>
+                    <h2 th:text="${pessoa.nome}">Nome da Pessoa</h2>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-hashtag"></i> ID</th>
+                            <th><i class="fas fa-user"></i> Nome</th>
+                            <th><i class="fas fa-calendar-alt"></i> Idade</th>
+                            <th><i class="fas fa-cogs"></i> Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td th:text="${pessoa.id}"></td>
+                            <td th:text="${pessoa.nome}"></td>
+                            <td th:text="${pessoa.idade}"></td>
+                            <td>
+                                <form th:action="@{/pessoas/{id}/excluir(id=${pessoa.id})}" 
+                                      method="post" 
+                                      style="display: inline;"
+                                      onsubmit="return confirm('Tem certeza que deseja excluir esta pessoa? Esta ação não pode ser desfeita.');">
+                                    <button type="submit" class="botao delete">
+                                        <i class="fas fa-trash"></i> Excluir
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Informações adicionais -->
+            <div class="info-card">
+                <h3><i class="fas fa-info-circle"></i> Informações Adicionais</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div>
+                        <strong><i class="fas fa-hashtag"></i> ID:</strong>
+                        <p th:text="${pessoa.id}"></p>
+                    </div>
+                    <div>
+                        <strong><i class="fas fa-user"></i> Nome:</strong>
+                        <p th:text="${pessoa.nome}"></p>
+                    </div>
+                    <div>
+                        <strong><i class="fas fa-calendar-alt"></i> Idade:</strong>
+                        <p th:text="${pessoa.idade} + ' anos'"></p>
+                    </div>
+                    <div>
+                        <strong><i class="fas fa-clock"></i> Status:</strong>
+                        <p style="color: #27ae60;"><i class="fas fa-check-circle"></i> Ativo</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botões de ação -->
+            <div style="text-align: center; margin-top: 2rem;">
+                <a th:href="@{/pessoas/listar}" class="botao">
+                    <i class="fas fa-list"></i> Voltar à Lista
+                </a>
+                <a th:href="@{/pessoas/cadastrar}" class="botao">
+                    <i class="fas fa-plus"></i> Cadastrar Nova Pessoa
+                </a>
+            </div>
+            
+            <!-- Aviso sobre exclusão -->
+            <div class="info-card" style="background: #fff3cd; border-left-color: #ffc107;">
+                <h3><i class="fas fa-exclamation-triangle"></i> Aviso Importante</h3>
+                <p>A exclusão de uma pessoa é uma ação permanente e não pode ser desfeita. Certifique-se de que realmente deseja excluir esta pessoa antes de confirmar a ação.</p>
+            </div>
+        </div>
     </main>
+    
     <footer>
-        <p>(c) 2025 Meu App</p>
+        <p><i class="fas fa-code"></i> Sistema de Pessoas - Desenvolvido com Spring Boot & Thymeleaf</p>
     </footer>
 </body>
 
