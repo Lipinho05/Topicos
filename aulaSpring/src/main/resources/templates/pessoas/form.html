@@ -15,13 +15,7 @@
     <main class="main-content">
         <div class="content-container">
             <h1><i class="fas fa-user-plus"></i> Cadastrar Pessoa</h1>
-            
-            <!-- Informações do formulário -->
-            <div class="info-card">
-                <h3><i class="fas fa-info-circle"></i> Informações</h3>
-                <p>Preencha os dados abaixo para cadastrar uma nova pessoa no sistema.</p>
-            </div>
-            
+    
             <!-- Formulário -->
             <form th:action="@{/pessoas/cadastrar}" th:object="${pessoa}" method="post">
                 <div class="form-group">
@@ -65,15 +59,7 @@
                 </div>
             </form>
             
-            <!-- Dicas de validação -->
-            <div class="info-card">
-                <h3><i class="fas fa-lightbulb"></i> Dicas</h3>
-                <ul style="margin-left: 1rem;">
-                    <li>O nome deve conter pelo menos 2 caracteres</li>
-                    <li>A idade deve ser um número entre 1 e 120 anos</li>
-                    <li>Ambos os campos são obrigatórios</li>
-                </ul>
-            </div>
+           
         </div>
     </main>
     
