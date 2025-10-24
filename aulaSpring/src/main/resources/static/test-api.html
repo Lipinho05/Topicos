@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Integração - APIs REST</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Teste de Integração - Sistema de Pessoas</h1>
+    
+    <div class="test-section">
+        <h2>1. Teste GET /api/pessoas</h2>
+        <button onclick="testGetPessoas()">Listar Pessoas</button>
+        <div id="getResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Teste POST /api/pessoas</h2>
+        <button onclick="testPostPessoa()">Cadastrar Pessoa de Teste</button>
+        <div id="postResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Teste GET /api/pessoas/{id}</h2>
+        <input type="number" id="pessoaId" placeholder="ID da pessoa" style="padding: 5px; margin: 5px;">
+        <button onclick="testGetPessoaById()">Buscar por ID</button>
+        <div id="getByIdResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Teste DELETE /api/pessoas/{id}</h2>
+        <input type="number" id="deleteId" placeholder="ID para excluir" style="padding: 5px; margin: 5px;">
+        <button onclick="testDeletePessoa()">Excluir Pessoa</button>
+        <div id="deleteResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Links Úteis</h2>
+        <p><a href="/pessoas/listar" target="_blank">Interface Thymeleaf - Lista</a></p>
+        <p><a href="/pessoas/cadastrar" target="_blank">Interface Thymeleaf - Cadastro</a></p>
+        <p><a href="/vue-app/" target="_blank">Aplicação Vue.js</a></p>
+    </div>
+
+    <script>
+        async function testGetPessoas() {
+            const resultDiv = document.getElementById('getResult');
+            resultDiv.innerHTML = '<p>Carregando...</p>';
+            
+            try {
+                const response = await fetch('/api/pessoas');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Sucesso!</h3>
+                        <p>Status: ${response.status}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Erro!</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testPostPessoa() {
+            const resultDiv = document.getElementById('postResult');
+            resultDiv.innerHTML = '<p>Carregando...</p>';
+            
+            try {
+                const response = await fetch('/api/pessoas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nome: 'Pessoa Teste Vue.js',
+                        idade: 25
+                    })
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Sucesso!</h3>
+                        <p>Status: ${response.status}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Erro!</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testGetPessoaById() {
+            const id = document.getElementById('pessoaId').value;
+            const resultDiv = document.getElementById('getByIdResult');
+            
+            if (!id) {
+                resultDiv.innerHTML = '<div class="error"><p>Por favor, insira um ID</p></div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<p>Carregando...</p>';
+            
+            try {
+                const response = await fetch(`/api/pessoas/${id}`);
+                
+                if (response.status === 404) {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Pessoa não encontrada!</h3>
+                            <p>Status: ${response.status}</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Sucesso!</h3>
+                        <p>Status: ${response.status}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Erro!</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testDeletePessoa() {
+            const id = document.getElementById('deleteId').value;
+            const resultDiv = document.getElementById('deleteResult');
+            
+            if (!id) {
+                resultDiv.innerHTML = '<div class="error"><p>Por favor, insira um ID</p></div>';
+                return;
+            }
+            
+            if (!confirm(`Tem certeza que deseja excluir a pessoa com ID ${id}?`)) {
+                return;
+            }
+            
+            resultDiv.innerHTML = '<p>Carregando...</p>';
+            
+            try {
+                const response = await fetch(`/api/pessoas/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.status === 204) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Sucesso!</h3>
+                            <p>Status: ${response.status} - Pessoa excluída com sucesso!</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Erro!</h3>
+                            <p>Status: ${response.status}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Erro!</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

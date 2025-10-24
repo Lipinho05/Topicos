@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pessoas - Vue.js</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <ul class="nav-list">
+                <li><a href="#" @click="showList" class="nav-link" :class="{ active: currentView === 'list' }">Lista de Pessoas</a></li>
+                <li><a href="#" @click="showForm" class="nav-link" :class="{ active: currentView === 'form' }">Cadastrar Pessoa</a></li>
+            </ul>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Lista de Pessoas -->
+            <div v-if="currentView === 'list'">
+                <h1>Lista de Pessoas</h1>
+                <div v-if="loading" class="loading">Carregando...</div>
+                <div v-else-if="error" class="error">{{ error }}</div>
+                <table v-else>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Idade</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="pessoa in pessoas" :key="pessoa.id">
+                            <td>{{ pessoa.id }}</td>
+                            <td>{{ pessoa.nome }}</td>
+                            <td>{{ pessoa.idade }}</td>
+                            <td>
+                                <button @click="showDetails(pessoa)" class="botao">Detalhes</button>
+                                <button @click="deletePessoa(pessoa.id)" class="botao delete">Excluir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Formulário de Cadastro -->
+            <div v-if="currentView === 'form'">
+                <h1>Cadastrar Pessoa</h1>
+                <form @submit.prevent="submitForm">
+                    <div>
+                        <label>Nome:</label>
+                        <input type="text" v-model="formData.nome" placeholder="Nome completo" required />
+                        <div v-if="errors.nome" class="error">{{ errors.nome }}</div>
+                    </div>
+                    <div>
+                        <label>Idade:</label>
+                        <input type="number" v-model="formData.idade" required />
+                        <div v-if="errors.idade" class="error">{{ errors.idade }}</div>
+                    </div>
+                    <button type="submit" class="botao" :disabled="loading">Salvar</button>
+                </form>
+            </div>
+
+            <!-- Detalhes da Pessoa -->
+            <div v-if="currentView === 'details'">
+                <h1>Detalhes da Pessoa</h1>
+                <div v-if="loading" class="loading">Carregando...</div>
+                <div v-else-if="error" class="error">{{ error }}</div>
+                <table v-else>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Idade</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ selectedPessoa.id }}</td>
+                            <td>{{ selectedPessoa.nome }}</td>
+                            <td>{{ selectedPessoa.idade }}</td>
+                            <td>
+                                <button @click="deletePessoa(selectedPessoa.id)" class="botao delete">Excluir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button @click="showList" class="botao">Voltar à Lista</button>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>(c) 2025 Sistema de Pessoas - Vue.js</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
