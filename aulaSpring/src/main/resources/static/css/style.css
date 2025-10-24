@@ -47,6 +47,7 @@ body {
 .nav-link.active {
     color: white;
     transform: translateY(-2px);
+    background: #4d6aeb;
     box-shadow: 0 4px 15px rgba(234, 164, 102, 0.4);
 }
 
