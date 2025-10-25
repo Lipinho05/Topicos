@@ -1,24 +1,9 @@
 <nav th:fragment="navbar" xmlns:th="http://www.thymeleaf.org" class="navbar">
-    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-        <!-- Logo/Brand -->
-        <div style="display: flex; align-items: center;">
-            <i class="fas fa-users" style="font-size: 1.5rem; color: #667eea; margin-right: 0.5rem;"></i>
-            <span style="font-weight: 700; font-size: 1.2rem; color: #333;">Sistema de Pessoas</span>
-        </div>
-        
-        <!-- Menu de navegação -->
-        <ul class="nav-list">
-            <li>
-                <a th:href="@{/pessoas/listar}" class="nav-link">
-                    <i class="fas fa-list"></i> Lista de Pessoas
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/pessoas/cadastrar}" class="nav-link">
-                    <i class="fas fa-user-plus"></i> Cadastrar Pessoa
-                </a>
-            </li>
-        </ul>
-        
-    </div>
+  <input type="checkbox" id="menu-checkbox" hidden>
+  <label for="menu-checkbox" class="menu-toggle">☰</label>
+  <ul class="nav-list">
+    <li><a th:href="@{/pessoas/listar}" class="nav-link">Lista</a></li>
+    <li><a th:href="@{/pessoas/cadastrar}" class="nav-link">Cadastrar</a></li>
+    <li><a href="/pessoasNew" class="nav-link">Sistema Vue.js</a></li>
+  </ul>
 </nav>

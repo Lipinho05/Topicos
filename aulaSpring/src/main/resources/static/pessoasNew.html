@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pessoas - Vue.js</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Estilos específicos para o Vue.js */
+        .vue-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .vue-navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 2rem;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .vue-nav-list {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .vue-nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .vue-nav-link:hover,
+        .vue-nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .vue-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+        }
+        
+        .vue-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .vue-table th {
+            background: #667eea;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .vue-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .vue-table tr:hover {
+            background-color: #f8f9ff;
+        }
+        
+        .vue-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .vue-form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .vue-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .vue-form input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .vue-form input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .vue-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 0.25rem;
+        }
+        
+        .vue-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .vue-btn-danger {
+            background: #ff6b6b;
+        }
+        
+        .vue-btn-danger:hover {
+            background: #ff5252;
+        }
+        
+        .vue-loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .vue-error {
+            background: #ffeaea;
+            color: #e74c3c;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .vue-success {
+            background: #eafaf1;
+            color: #27ae60;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .vue-details {
+            background: #f8f9ff;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Navbar Vue.js -->
+        <nav class="vue-navbar">
+            <ul class="vue-nav-list">
+                <li>
+                    <a href="#" @click="showList" :class="{ active: currentView === 'list' }" class="vue-nav-link">
+                        <i class="fas fa-list"></i> Lista de Pessoas
+                    </a>
+                </li>
+                <li>
+                    <a href="#" @click="showForm" :class="{ active: currentView === 'form' }" class="vue-nav-link">
+                        <i class="fas fa-user-plus"></i> Cadastrar Pessoa
+                    </a>
+                </li>
+                <li>
+                    <a href="/pessoas/listar" class="vue-nav-link">
+                        <i class="fas fa-code"></i> Sistema Thymeleaf
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="vue-container">
+            <div class="vue-content">
+                <!-- Loading -->
+                <div v-if="loading" class="vue-loading">
+                    <i class="fas fa-spinner fa-spin"></i> Carregando...
+                </div>
+
+                <!-- Error Message -->
+                <div v-if="error" class="vue-error">
+                    <i class="fas fa-exclamation-triangle"></i> {{ error }}
+                </div>
+
+                <!-- List View -->
+                <div v-if="currentView === 'list'">
+                    <h1><i class="fas fa-users"></i> Lista de Pessoas</h1>
+                    <table class="vue-table" v-if="pessoas.length > 0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Idade</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="pessoa in pessoas" :key="pessoa.id">
+                                <td>{{ pessoa.id }}</td>
+                                <td>{{ pessoa.nome }}</td>
+                                <td>{{ pessoa.idade }}</td>
+                                <td>
+                                    <button @click="showDetails(pessoa)" class="vue-btn">
+                                        <i class="fas fa-eye"></i> Ver Detalhes
+                                    </button>
+                                    <button @click="deletePessoa(pessoa.id)" class="vue-btn vue-btn-danger">
+                                        <i class="fas fa-trash"></i> Excluir
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div v-else-if="!loading">
+                        <p>Nenhuma pessoa cadastrada.</p>
+                    </div>
+                </div>
+
+                <!-- Form View -->
+                <div v-if="currentView === 'form'">
+                    <h1><i class="fas fa-user-plus"></i> Cadastrar Nova Pessoa</h1>
+                    <form @submit.prevent="submitForm" class="vue-form">
+                        <div class="vue-form-group">
+                            <label for="nome">Nome:</label>
+                            <input 
+                                type="text" 
+                                id="nome" 
+                                v-model="formData.nome" 
+                                placeholder="Digite o nome completo"
+                                required
+                            >
+                        </div>
+                        <div class="vue-form-group">
+                            <label for="idade">Idade:</label>
+                            <input 
+                                type="number" 
+                                id="idade" 
+                                v-model="formData.idade" 
+                                placeholder="Digite a idade"
+                                min="1"
+                                max="120"
+                                required
+                            >
+                        </div>
+                        <button type="submit" class="vue-btn" :disabled="loading">
+                            <i class="fas fa-save"></i> Salvar Pessoa
+                        </button>
+                        <button type="button" @click="showList" class="vue-btn">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Details View -->
+                <div v-if="currentView === 'details' && selectedPessoa">
+                    <a href="#" @click="showList" class="back-link">
+                        <i class="fas fa-arrow-left"></i> Voltar para a lista
+                    </a>
+                    <h1><i class="fas fa-user"></i> Detalhes da Pessoa</h1>
+                    <div class="vue-details">
+                        <p><strong>ID:</strong> {{ selectedPessoa.id }}</p>
+                        <p><strong>Nome:</strong> {{ selectedPessoa.nome }}</p>
+                        <p><strong>Idade:</strong> {{ selectedPessoa.idade }} anos</p>
+                    </div>
+                    <button @click="deletePessoa(selectedPessoa.id)" class="vue-btn vue-btn-danger">
+                        <i class="fas fa-trash"></i> Excluir Pessoa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/vue-app/app.js"></script>
+</body>
+</html>
